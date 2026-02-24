@@ -1,0 +1,32 @@
+{
+  "name": "trello",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "staged:lint": "biome check",
+    "prepare": "husky",
+    "staged:format": "biome format --write"
+  },
+  "dependencies": {
+    "jotai": "^2.18.0",
+    "next": "^16.1.6",
+    "react": "19.1.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.0",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@commitlint/types": "^20.4.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "husky": "^9.1.7",
+    "sass": "^1.97.3",
+    "typescript": "^5"
+  }
+}
