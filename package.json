@@ -6,9 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "staged:lint": "biome check",
     "prepare": "husky",
-    "staged:format": "biome format --write"
+    "staged:lint": "biome check",
+    "staged:format": "biome format --write",
+    "pre-commit": "lint-staged",
+    "commit-lint": "commitlint --edit"
   },
   "dependencies": {
     "jotai": "^2.18.0",

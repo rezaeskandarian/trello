@@ -1,0 +1,1 @@
+module.exports = {    "*.{js,ts,tsx,css,sass,json}": ["pnpm staged:format"],    "*.{js,ts,tsx}": ["pnpm staged:lint"],};
