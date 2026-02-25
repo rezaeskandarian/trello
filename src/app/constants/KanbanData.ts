@@ -5,7 +5,7 @@ let taskId = 1;
 const createTask = (title: string, dueDate: string): Task => ({
   id: taskId++,
   Task: title,
-  Due_Date: dueDate,
+
 });
 
 /**

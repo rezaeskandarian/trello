@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { DragEndEvent } from "@dnd-kit/core";
 import { ColumnsState } from "../components/kanban/kanban.types";
-import { moveTask, addTask, addColumn, updateColumnTitle, addComment } from "../utils/kanbanUtils";
+import { moveTask, addTask, addColumn, updateColumnTitle, addComment, deleteColumn, clearColumnTasks } from "../utils/kanbanUtils";
 import { columnsFromBackend } from "../constants/KanbanData";
 
 export const columnsAtom = atom<ColumnsState>(columnsFromBackend);
@@ -47,4 +47,22 @@ export const addCommentAtom = atom(
         const nextState = addComment(currentState, columnId, taskId, text);
         set(columnsAtom, nextState);
     }
+);
+
+export const deleteColumnAtom = atom(
+  null,
+  (get, set, columnId: string) => {
+    const currentState = get(columnsAtom);
+    const nextState = deleteColumn(currentState, columnId);
+    set(columnsAtom, nextState);
+  }
+);
+
+export const clearColumnTasksAtom = atom(
+  null,
+  (get, set, columnId: string) => {
+    const currentState = get(columnsAtom);
+    const nextState = clearColumnTasks(currentState, columnId);
+    set(columnsAtom, nextState);
+  }
 );
