@@ -11,6 +11,12 @@
   width: 100%;
 }
 
+.titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out title and reset button */
+}
+
 .boardTitle {
   font-size: 20px;
   font-weight: 700;
@@ -20,10 +26,28 @@
   cursor: pointer;
   border-radius: 3px;
   display: inline-block;
+  margin-right: 20px;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
+}
+
+.resetButton {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 20px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
 }
 
 .boardTitleInput {
