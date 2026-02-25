@@ -2,27 +2,27 @@
   display: flex;
   flex-direction: column;
   padding-left: 10px;
-  width: 100%; /* Ensure container takes full width if needed */
+  width: 100%;
 }
 
 .boardHeader {
   padding: 10px 0;
   margin-bottom: 20px;
-  width: 100%; /* Ensure header takes full width */
+  width: 100%;
 }
 
 .boardTitle {
   font-size: 20px;
   font-weight: 700;
   line-height: 24px;
-  padding: 8px 12px; /* Slight adjustment for better look */
-  color: #fff; /* Changed to white */
+  padding: 8px 12px;
+  color: #fff;
   cursor: pointer;
   border-radius: 3px;
   display: inline-block;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Adjusted hover for white text */
+    background-color: rgba(255, 255, 255, 0.2);
   }
 }
 

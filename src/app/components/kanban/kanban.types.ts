@@ -1,7 +1,13 @@
+export interface Comment {
+  id: number;
+  text: string;
+  timestamp: string;
+}
+
 export interface Task {
   id: number;
   Task: string;
-  Due_Date: string;
+  comments?: Comment[];
 }
 
 export interface Column {
