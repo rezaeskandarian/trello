@@ -5,6 +5,7 @@ import { moveTask, addTask, addColumn, updateColumnTitle } from "../utils/kanban
 import { columnsFromBackend } from "../constants/KanbanData";
 
 export const columnsAtom = atom<ColumnsState>(columnsFromBackend);
+export const boardTitleAtom = atom<string>("Demo Board");
 
 export const moveTaskAtom = atom(null, (get, set, event: DragEndEvent) => {
   const currentState = get(columnsAtom);

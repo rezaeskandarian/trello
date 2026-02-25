@@ -12,8 +12,8 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import { useAtomValue, useSetAtom } from "jotai";
-import { columnsAtom, moveTaskAtom, addColumnAtom } from "../../atom/kanbanStore";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { columnsAtom, moveTaskAtom, addColumnAtom, boardTitleAtom } from "../../atom/kanbanStore";
 import styles from "./Kanban.module.scss";
 import Column from "./Colomn";
 import TaskCard from "./TaskCard";
@@ -26,6 +26,10 @@ const Kanban = () => {
   const columns = useAtomValue(columnsAtom);
   const moveTask = useSetAtom(moveTaskAtom);
   const addColumn = useSetAtom(addColumnAtom);
+
+  const [boardTitle, setBoardTitle] = useAtom(boardTitleAtom);
+  const [isEditingBoardTitle, setIsEditingBoardTitle] = useState(false);
+  const [tempBoardTitle, setTempBoardTitle] = useState(boardTitle);
 
   const handleDragEnd = (event: DragEndEvent) => {
     moveTask(event);
@@ -71,6 +75,15 @@ const Kanban = () => {
     }
   };
 
+  const handleBoardTitleSubmit = () => {
+    setIsEditingBoardTitle(false);
+    if (tempBoardTitle.trim() && tempBoardTitle !== boardTitle) {
+      setBoardTitle(tempBoardTitle);
+    } else {
+      setTempBoardTitle(boardTitle);
+    }
+  };
+
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -79,6 +92,32 @@ const Kanban = () => {
       sensors={sensors}
     >
       <section className={styles.container}>
+        <div className={styles.boardHeader}>
+          {isEditingBoardTitle ? (
+            <input
+              className={styles.boardTitleInput}
+              value={tempBoardTitle}
+              onChange={(e) => setTempBoardTitle(e.target.value)}
+              onBlur={handleBoardTitleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleBoardTitleSubmit();
+                }
+              }}
+              autoFocus
+            />
+          ) : (
+            <h1
+              className={styles.boardTitle}
+              onClick={() => {
+                  setIsEditingBoardTitle(true);
+                  setTempBoardTitle(boardTitle);
+              }}
+            >
+              {boardTitle}
+            </h1>
+          )}
+        </div>
         <div className={styles.columnsWrapper}>
           {Object.entries(columns).map(([columnId, column]) => (
             <Column key={columnId} columnId={columnId} column={column} />

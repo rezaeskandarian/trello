@@ -1,5 +1,46 @@
 .container {
   display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+  width: 100%; /* Ensure container takes full width if needed */
+}
+
+.boardHeader {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  width: 100%; /* Ensure header takes full width */
+}
+
+.boardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  padding: 8px 12px; /* Slight adjustment for better look */
+  color: #fff; /* Changed to white */
+  cursor: pointer;
+  border-radius: 3px;
+  display: inline-block;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Adjusted hover for white text */
+  }
+}
+
+.boardTitleInput {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  padding: 0 12px;
+  color: #172b4d;
+  background-color: #fff;
+  border: 2px solid #0079bf;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  display: inline-block;
+  width: auto;
+  min-width: 200px;
+  outline: none;
 }
 
 .columnsWrapper {
