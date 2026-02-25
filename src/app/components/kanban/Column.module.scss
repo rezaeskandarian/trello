@@ -4,3 +4,110 @@
   border-radius: 5px;
   padding: 15px;
 }
+
+.title {
+    font-weight: 600;
+    font-size: 16px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    display: block;
+    border-radius: 3px;
+
+    &:hover {
+        background-color: rgba(9, 30, 66, 0.08);
+    }
+}
+
+.titleInput {
+    font-weight: 600;
+    font-size: 16px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    border: 2px solid #0079bf;
+    border-radius: 3px;
+    outline: none;
+    box-sizing: border-box;
+    display: block;
+    background-color: #fff;
+    font-family: inherit;
+    color: #172b4d;
+}
+
+.addCardTrigger {
+    background-color: transparent;
+    border: none;
+    color: #5e6c84;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px;
+    text-align: left;
+    width: 100%;
+    border-radius: 4px;
+
+    &:hover {
+        background-color: rgba(9, 30, 66, 0.08);
+        color: #172b4d;
+    }
+}
+
+.addCardContainer {
+    margin-top: 8px;
+}
+
+.addCardTextarea {
+    background-color: #fff;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    box-sizing: border-box;
+    color: #172b4d;
+    display: block;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 8px;
+    min-height: 54px;
+    padding: 8px 12px;
+    resize: none;
+    width: 100%;
+    outline: none;
+
+    &:focus {
+        box-shadow: 0 0 0 2px #0079bf;
+    }
+}
+
+.addCardActions {
+    display: flex;
+    align-items: center;
+}
+
+.addCardButton {
+    background-color: #0079bf;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-right: 8px;
+
+    &:hover {
+        background-color: #026aa7;
+    }
+}
+
+.cancelButton {
+    background: none;
+    border: none;
+    color: #6b778c;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+
+    &:hover {
+        color: #172b4d;
+    }
+}

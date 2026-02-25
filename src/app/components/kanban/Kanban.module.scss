@@ -6,6 +6,9 @@
   display: flex;
   width: 100%;
   gap: 20px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  overflow-x: auto;
 }
 
 .title {
@@ -16,6 +19,108 @@
   font-weight: 500;
   display: inline-block;
   margin-bottom: 10px;
+}
+
+.addColumnContainer {
+  min-width: 272px;
+  width: 272px;
+  background-color: hsla(0, 0%, 100%, .24);
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 85ms ease-in, opacity 40ms ease-in, border-color 85ms ease-in;
+  margin-left: 8px;
+
+  &:hover {
+    background-color: hsla(0, 0%, 100%, .32);
+  }
+}
+
+.addColumnButton {
+  border-radius: 3px;
+  color: #172b4d;
+  background-color: rgba(0, 0, 0, 0.08);
+  background-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background-color: #e2e4e6;
+  }
+}
+
+.addColumnForm {
+  background-color: #ebecf0;
+  border-radius: 3px;
+  padding: 4px;
+  min-width: 272px;
+  width: 272px;
+  margin-left: 8px;
+}
+
+.addColumnInput {
+  background-color: #fff;
+  border: 2px solid #0079bf;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #172b4d;
+  display: block;
+  line-height: 20px;
+  margin-bottom: 4px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+
+.addColumnActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.addListButton {
+  background-color: #0079bf;
+  border: none;
+  border-radius: 3px;
+  box-shadow: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 6px 12px;
+  text-align: center;
+
+  &:hover {
+    background-color: #026aa7;
+  }
+}
+
+.cancelAddColumn {
+  background: none;
+  border: none;
+  color: #42526e;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #172b4d;
+  }
 }
 
 .dragOverlay {
