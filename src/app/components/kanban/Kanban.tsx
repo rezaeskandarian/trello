@@ -107,11 +107,11 @@ const Kanban = () => {
         </div>
       </section>
       <DragOverlay>
-        {activeTask ? (
+        {activeTask && (
           <div className={styles.dragOverlay}>
             <TaskCard task={activeTask} columnId="overlay" />
           </div>
-        ) : null}
+        ) }
       </DragOverlay>
     </DndContext>
   );

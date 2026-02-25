@@ -8,9 +8,6 @@ const createTask = (title: string, dueDate: string): Task => ({
 
 });
 
-/**
- * Seed Tasks
- */
 const todoTasks: Task[] = [
   createTask(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -27,9 +24,7 @@ const doneTasks: Task[] = [
   createTask("Proin Optimization", "2021-01-05"),
 ];
 
-/**
- * Stable Column IDs
- */
+
 export const columnsFromBackend: ColumnsState = {
   1: {
     title: "To-do",

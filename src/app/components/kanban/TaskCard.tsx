@@ -24,7 +24,7 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
   };
 
   const handleOpenModal = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent drag start when clicking the button
+    e.stopPropagation();
     setIsModalOpen(true);
   };
 
@@ -32,28 +32,27 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
     setIsModalOpen(false);
   };
 
-  // Prevent drag listeners on the modal trigger button logic handled in main return
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
   return (
     <>
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <section ref={setNodeRef} style={style} {...attributes} {...listeners}>
         <div className={styles.card}>
           <p>{task.Task}</p>
 
           <div className={styles.secondary}>
             <button
               className={styles.commentButton}
-              onPointerDown={stopPropagation} // Check if this stops drag
+              onPointerDown={stopPropagation}
               onClick={handleOpenModal}
             >
               Comments ({task.comments?.length || 0})
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
       {isModalOpen && (
         <CommentModal
