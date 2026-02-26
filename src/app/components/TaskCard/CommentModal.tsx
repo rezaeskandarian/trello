@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import type { ChangeEvent } from "react";
 import styles from "../TaskCard/TaskCard.module.scss";
-import type { Comment, Task } from "../kanban/kanban.types";
+import type { Comment, Task } from "../Kanban/kanban.types";
 import { useSetAtom } from "jotai";
 import { addCommentAtom } from "../../atom/kanbanStore";
+import { Button, Textarea } from "../ui";
 
 interface CommentModalProps {
   task: Task;
@@ -34,13 +36,14 @@ const CommentModal = ({ task, columnId, onClose }: CommentModalProps) => {
       <div className={styles.modalContent} onClick={stopPropagation}>
         <div className={styles.modalHeader}>
           <h3>{task.Task}</h3>
-          <button
+          <Button
             type="button"
+            variant="transparent"
             className={styles.closeButton}
             onClick={onClose}
           >
             ×
-          </button>
+          </Button>
         </div>
 
         <div className={styles.commentsList}>
@@ -64,19 +67,21 @@ const CommentModal = ({ task, columnId, onClose }: CommentModalProps) => {
         </div>
 
         <div className={styles.addCommentSection}>
-          <textarea
+          <Textarea
             className={styles.commentInput}
             placeholder="write the comment ...."
             value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setCommentText(e.target.value)
+            }
           />
-          <button
+          <Button
             type="button"
             className={styles.addCommentBtn}
             onClick={handleAddComment}
           >
             Add Comment
-          </button>
+          </Button>
         </div>
       </div>
     </div>

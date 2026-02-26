@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils"; // Import atomWithStorage
 import { DragEndEvent } from "@dnd-kit/core";
-import { ColumnsState } from "../components/kanban/kanban.types";
+import { ColumnsState } from "../components/Kanban/kanban.types";
 import { moveTask, addTask, addColumn, updateColumnTitle, addComment, deleteColumn, clearColumnTasks } from "../utils/kanbanUtils";
 import { columnsFromBackend } from "../constants/KanbanData";
 

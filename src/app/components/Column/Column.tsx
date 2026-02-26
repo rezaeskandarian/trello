@@ -7,7 +7,7 @@ import { useDroppable } from "@dnd-kit/core";
 import styles from "./Column.module.scss";
 import { useSetAtom } from "jotai";
 import { addTaskAtom, updateColumnTitleAtom } from "../../atom/kanbanStore";
-import type { Column as ColumnType } from "../kanban/kanban.types";
+import type { Column as ColumnType } from "../Kanban/kanban.types";
 import ColumnActionsMenu from "./ColumnActionsMenu";
 import EditableTitle from "../EditableTitle";
 import AddCardForm from "./AddCardForm";
@@ -35,8 +35,12 @@ const Column = ({
   };
 
   return (
-    <div ref={setNodeRef} className={styles.taskList}>
-      <div className={styles.columnHeader}>
+    <section
+      ref={setNodeRef}
+      className={styles.taskList}
+      aria-label={`Column: ${column.title}`}
+    >
+      <header className={styles.columnHeader}>
         <div>
           <EditableTitle
             title={column.title}
@@ -46,19 +50,23 @@ const Column = ({
           />
         </div>
         <ColumnActionsMenu columnId={columnId} />
-      </div>
+      </header>
 
       <SortableContext
         items={column.items.map((task) => `${columnId}-${task.id}`)}
         strategy={verticalListSortingStrategy}
       >
-        {column.items.map((task) => (
-          <TaskCard key={task.id} task={task} columnId={columnId} />
-        ))}
+        <ul className={styles.cardsList} role="list">
+          {column.items.map((task) => (
+            <li key={task.id} className={styles.cardsListItem}>
+              <TaskCard task={task} columnId={columnId} />
+            </li>
+          ))}
+        </ul>
       </SortableContext>
 
       <AddCardForm onAdd={handleAddCard} />
-    </div>
+    </section>
   );
 };
 export default Column;

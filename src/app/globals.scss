@@ -1,7 +1,10 @@
+@use "../styles/variables" as v;
+
 :root {
-  --background: #2E7EAF;
-  --foreground: #171717;
+  --background: #{v.$background-color};
+  --foreground: #{v.$text-color};
 }
+
 
 html,
 body {

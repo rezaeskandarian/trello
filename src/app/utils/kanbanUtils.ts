@@ -1,93 +1,108 @@
 import { DragEndEvent } from "@dnd-kit/core";
-import type { ColumnsState } from "../components/kanban/kanban.types";
+import type { ColumnsState } from "../components/Kanban/kanban.types";
 import { arrayMove } from "@dnd-kit/sortable";
 
-export const moveTask = (
+/**
+ * DnD ID format used in this app:
+ * - Task:   "{columnId}-{taskId}"
+ * - Column: "{columnId}"
+ */
+
+type TaskLocation = { columnId: string; taskId: number };
+
+type DropLocation =
+  | { type: "column"; columnId: string }
+  | { type: "task"; columnId: string; taskId: number };
+
+const parseTaskLocation = (
   state: ColumnsState,
-  event: DragEndEvent,
-): ColumnsState => {
+  id: string,
+): TaskLocation | null => {
+  // columnId can contain dashes, so we match by checking every column prefix.
+  for (const columnId in state) {
+    const prefix = `${columnId}-`;
+    if (!id.startsWith(prefix)) continue;
+
+    const taskId = Number(id.slice(prefix.length));
+
+    // Keep previous behavior: if we matched a column prefix but taskId isn't a number, bail out.
+    if (Number.isNaN(taskId)) return null;
+
+    return { columnId, taskId };
+  }
+
+  return null;
+};
+
+const getDropLocation = (state: ColumnsState, overId: string): DropLocation | null => {
+  // Dropped on the empty area of a column.
+  if (overId in state) return { type: "column", columnId: overId };
+
+  const task = parseTaskLocation(state, overId);
+  if (!task) return null;
+
+  return { type: "task", columnId: task.columnId, taskId: task.taskId };
+};
+
+const findTaskIndex = (state: ColumnsState, columnId: string, taskId: number) => {
+  return state[columnId].items.findIndex((t) => t.id === taskId);
+};
+
+const resolveInsertIndex = (
+  state: ColumnsState,
+  drop: DropLocation,
+): number => {
+  const items = state[drop.columnId].items;
+
+  if (drop.type === "column") return items.length;
+
+  const index = findTaskIndex(state, drop.columnId, drop.taskId);
+  return index === -1 ? items.length : index;
+};
+
+export const moveTask = (state: ColumnsState, event: DragEndEvent): ColumnsState => {
   const { active, over } = event;
   if (!over) return state;
 
-  const activeId = active.id.toString();
-  const overId = over.id.toString();
+  const source = parseTaskLocation(state, active.id.toString());
+  if (!source) return state;
 
-  let sourceColumnId = "";
-  let sourceTaskId = -1;
+  const drop = getDropLocation(state, over.id.toString());
+  if (!drop) return state;
 
-  for (const colId in state) {
-    if (activeId.startsWith(`${colId}-`)) {
-      const remainder = activeId.slice(colId.length + 1);
-      if (!Number.isNaN(Number(remainder))) {
-        sourceColumnId = colId;
-        sourceTaskId = Number(remainder);
-        break;
-      }
-    }
-  }
+  const fromColumnId = source.columnId;
+  const toColumnId = drop.columnId;
 
-  if (!sourceColumnId) return state;
+  const fromItems = state[fromColumnId].items;
+  const toItems = state[toColumnId].items;
 
-  let destColumnId = "";
-  let isOverColumn = false;
-  let overTaskId = -1;
+  const fromIndex = findTaskIndex(state, fromColumnId, source.taskId);
+  if (fromIndex === -1) return state;
 
-  if (overId in state) {
-    destColumnId = overId;
-    isOverColumn = true;
-  } else {
-    for (const colId in state) {
-      if (overId.startsWith(`${colId}-`)) {
-        const remainder = overId.slice(colId.length + 1);
-        if (!isNaN(Number(remainder))) {
-          destColumnId = colId;
-          overTaskId = Number(remainder);
-          break;
-        }
-      }
-    }
-  }
+  const toIndex = resolveInsertIndex(state, drop);
 
-  if (!destColumnId) return state;
-
-  const sourceCol = state[sourceColumnId];
-  const destCol = state[destColumnId];
-
-  const sourceIndex = sourceCol.items.findIndex((t) => t.id === sourceTaskId);
-
-  let destIndex = -1;
-
-  if (isOverColumn) {
-    destIndex = destCol.items.length;
-  } else {
-    destIndex = destCol.items.findIndex((t) => t.id === overTaskId);
-  }
-
-  if (sourceIndex === -1) return state;
-  if (destIndex === -1) destIndex = destCol.items.length;
-
-  if (sourceColumnId === destColumnId) {
-    const reordered = arrayMove(sourceCol.items, sourceIndex, destIndex);
-
+  // 1) Move inside the same column (reorder)
+  if (fromColumnId === toColumnId) {
     return {
       ...state,
-      [sourceColumnId]: {
-        ...sourceCol,
-        items: reordered,
+      [fromColumnId]: {
+        ...state[fromColumnId],
+        items: arrayMove(fromItems, fromIndex, toIndex),
       },
     };
   }
 
-  const sourceItems = [...sourceCol.items];
-  const destItems = [...destCol.items];
+  // 2) Move between columns
+  const nextFromItems = [...fromItems];
+  const [movedTask] = nextFromItems.splice(fromIndex, 1);
 
-  const [moved] = sourceItems.splice(sourceIndex, 1);
-  destItems.splice(destIndex, 0, moved);
+  const nextToItems = [...toItems];
+  nextToItems.splice(toIndex, 0, movedTask);
 
   return {
     ...state,
-    [sourceColumnId]: { ...sourceCol, items: sourceItems },
-    [destColumnId]: { ...destCol, items: destItems },
+    [fromColumnId]: { ...state[fromColumnId], items: nextFromItems },
+    [toColumnId]: { ...state[toColumnId], items: nextToItems },
   };
 };
 

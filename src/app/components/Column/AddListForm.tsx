@@ -1,5 +1,7 @@
 import { useState } from "react";
-import styles from "../kanban/Kanban.module.scss";
+import type { ChangeEvent, KeyboardEvent } from "react";
+import styles from "./Column.module.scss";
+import { Button, Input } from "../ui";
 
 interface AddListFormProps {
   onAdd: (title: string) => void;
@@ -17,34 +19,39 @@ const AddListForm = ({ onAdd }: AddListFormProps) => {
     }
   };
 
+  const handleOnChangeAddListForm = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)
+
+    const handleOnKeyDownAddListForm = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") handleSubmit();
+    }
+
   if (isAdding) {
     return (
       <div className={styles.addColumnForm}>
-        <input
+        <Input
           type="text"
           className={styles.addColumnInput}
           placeholder="Enter list title..."
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSubmit();
-          }}
+          onChange={handleOnChangeAddListForm}
+          onKeyDown={handleOnKeyDownAddListForm}
         />
         <div className={styles.addColumnActions}>
-          <button
+          <Button
             type="button"
             className={styles.addListButton}
             onClick={handleSubmit}
           >
             Add List
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="transparent"
             className={styles.cancelAddColumn}
             onClick={() => setIsAdding(false)}
           >
-            ✕
-          </button>
+            ×
+          </Button>
         </div>
       </div>
     );
@@ -52,13 +59,14 @@ const AddListForm = ({ onAdd }: AddListFormProps) => {
 
   return (
     <div className={styles.addColumnContainer}>
-      <button
+      <Button
         type="button"
+        variant="transparent"
         className={styles.addColumnButton}
         onClick={() => setIsAdding(true)}
       >
         + Add another list
-      </button>
+      </Button>
     </div>
   );
 };

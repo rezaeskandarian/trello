@@ -1,21 +1,101 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./Column.module.scss";
 import { useSetAtom } from "jotai";
-import { deleteColumnAtom, clearColumnTasksAtom } from "../../atom/kanbanStore";
+import { clearColumnTasksAtom, deleteColumnAtom } from "../../atom/kanbanStore";
+import {Button} from "@/src/app/components/ui";
 
 interface ColumnActionsMenuProps {
   columnId: string;
 }
 
+type DropdownView = "main" | "deleteList" | "clearList";
+
+type MenuHeaderProps = {
+  title: string;
+  onClose: () => void;
+  onBack?: () => void;
+};
+
+const MenuHeader = ({ title, onClose, onBack }: MenuHeaderProps) => {
+  return (
+    <div className={styles.dropdownHeader}>
+      {onBack ? (
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={onBack}
+          aria-label="Back"
+        >
+          ←
+        </button>
+      ) : (
+        <span className={styles.backButtonPlaceholder} aria-hidden="true" />
+      )}
+
+      <span className={styles.dropdownTitle}>{title}</span>
+
+      <button
+        type="button"
+        className={styles.dropdownCloseBtn}
+        onClick={onClose}
+        aria-label="Close menu"
+      >
+        ×
+      </button>
+    </div>
+  );
+};
+
+type ConfirmActionProps = {
+  description: string;
+  actionLabel: string;
+  onAction: () => void;
+};
+
+const ConfirmAction = ({
+  description,
+  actionLabel,
+  onAction,
+}: ConfirmActionProps) => {
+  return (
+    <div className={styles.dropdownBody}>
+      <p>{description}</p>
+      <button type="button" className={styles.dangerButton} onClick={onAction}>
+        {actionLabel}
+      </button>
+    </div>
+  );
+};
+
 const ColumnActionsMenu = ({ columnId }: ColumnActionsMenuProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [dropdownView, setDropdownView] = useState<
-    "main" | "deleteList" | "clearList"
-  >("main");
+  const [dropdownView, setDropdownView] = useState<DropdownView>("main");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const deleteColumn = useSetAtom(deleteColumnAtom);
   const clearColumnTasks = useSetAtom(clearColumnTasksAtom);
+
+  const openDropdown = useCallback(() => {
+    setIsDropdownOpen(true);
+    setDropdownView("main");
+  }, []);
+
+  const closeDropdown = useCallback(() => {
+    setIsDropdownOpen(false);
+    setDropdownView("main");
+  }, []);
+
+  const toggleDropdown = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      setIsDropdownOpen((prev) => {
+        const next = !prev;
+        if (next) openDropdown();
+        return next;
+      });
+    },
+    [openDropdown],
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -23,41 +103,25 @@ const ColumnActionsMenu = ({ columnId }: ColumnActionsMenuProps) => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsDropdownOpen(false);
-        setDropdownView("main");
+        closeDropdown();
       }
     };
 
     if (isDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [closeDropdown, isDropdownOpen]);
 
-  const toggleDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsDropdownOpen(!isDropdownOpen);
-    setDropdownView("main");
-  };
-
-  const renderDropdownContent = () => {
-    switch (dropdownView) {
-      case "main":
-        return (
-          <>
-            <div className={styles.dropdownHeader}>
-              <span className={styles.dropdownTitle}>List Actions</span>
-              <button
-                type="button"
-                className={styles.dropdownCloseBtn}
-                onClick={() => setIsDropdownOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className={styles.dropdownDivider}></div>
+  const views = useMemo(
+    (): Record<DropdownView, { title: string; back?: () => void; content: React.ReactNode }> =>
+      ({
+        main: {
+          title: "List Actions",
+          content: (
             <ul className={styles.dropdownList}>
               <li onClick={() => setDropdownView("deleteList")}>
                 Delete List...
@@ -66,96 +130,61 @@ const ColumnActionsMenu = ({ columnId }: ColumnActionsMenuProps) => {
                 Delete All Cards...
               </li>
             </ul>
-          </>
-        );
-      case "deleteList":
-        return (
-          <>
-            <div className={styles.dropdownHeader}>
-              <button
-                type="button"
-                className={styles.backButton}
-                onClick={() => setDropdownView("main")}
-              >
-                ←
-              </button>
-              <span className={styles.dropdownTitle}>Delete List?</span>
-              <button
-                type="button"
-                className={styles.dropdownCloseBtn}
-                onClick={() => setIsDropdownOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className={styles.dropdownDivider}></div>
-            <div className={styles.dropdownBody}>
-              <p>
-                All actions will be removed from the activity feed and you won’t
-                be able to re-open the list. There is no undo.
-              </p>
-              <button
-                type="button"
-                className={`${styles.dangerButton}`}
-                onClick={() => deleteColumn(columnId)}
-              >
-                Delete List
-              </button>
-            </div>
-          </>
-        );
-      case "clearList":
-        return (
-          <>
-            <div className={styles.dropdownHeader}>
-              <button
-                type="button"
-                className={styles.backButton}
-                onClick={() => setDropdownView("main")}
-              >
-                ←
-              </button>
-              <span className={styles.dropdownTitle}>Delete All Cards?</span>
-              <button
-                type="button"
-                className={styles.dropdownCloseBtn}
-                onClick={() => setIsDropdownOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <div className={styles.dropdownDivider}></div>
-            <div className={styles.dropdownBody}>
-              <p>This will remove all the cards in this list from the board.</p>
-              <button
-                type="button"
-                className={`${styles.dangerButton}`}
-                onClick={() => {
-                  clearColumnTasks(columnId);
-                  setIsDropdownOpen(false);
-                }}
-              >
-                Delete All
-              </button>
-            </div>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
+          ),
+        },
+        deleteList: {
+          title: "Delete List?",
+          back: () => setDropdownView("main"),
+          content: (
+            <ConfirmAction
+              description="All actions will be removed from the activity feed and you won’t be able to re-open the list. There is no undo."
+              actionLabel="Delete List"
+              onAction={() => deleteColumn(columnId)}
+            />
+          ),
+        },
+        clearList: {
+          title: "Delete All Cards?",
+          back: () => setDropdownView("main"),
+          content: (
+            <ConfirmAction
+              description="This will remove all the cards in this list from the board."
+              actionLabel="Delete All"
+              onAction={() => {
+                clearColumnTasks(columnId);
+                closeDropdown();
+              }}
+            />
+          ),
+        },
+      }),
+    [clearColumnTasks, closeDropdown, columnId, deleteColumn],
+  );
+
+  const currentView = views[dropdownView];
 
   return (
     <div className={styles.menuContainer} ref={dropdownRef}>
-      <button
+      <Button
         type="button"
         className={styles.menuButton}
         onClick={toggleDropdown}
+        aria-haspopup="menu"
+        aria-expanded={isDropdownOpen}
       >
         •••
-      </button>
+      </Button>
+
       {isDropdownOpen && (
-        <div className={styles.dropdownMenu}>{renderDropdownContent()}</div>
+        <div className={styles.dropdownMenu}>
+          <MenuHeader
+            title={currentView.title}
+            onClose={closeDropdown}
+            onBack={currentView.back}
+          />
+          <div className={styles.dropdownDivider} />
+          {currentView.content}
+        </div>
       )}
     </div>
   );

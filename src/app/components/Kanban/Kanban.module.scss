@@ -1,0 +1,116 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+@use "../../../styles/_breakpoints.scss" as b;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-left: v.$spacing-md;
+  width: 100%;
+}
+
+.boardHeader {
+  padding: v.$spacing-md 0;
+  margin-bottom: v.$spacing-xl;
+  width: 100%;
+}
+
+.titleContainer {
+  @include m.flex-between;
+}
+
+.boardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  padding: v.$spacing-sm v.$spacing-md;
+  color: #fff;
+  cursor: pointer;
+  border-radius: v.$border-radius;
+  display: inline-block;
+  margin-right: v.$spacing-xl;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.resetButton {
+  @include m.button-reset;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: v.$border-radius;
+  padding: v.$spacing-sm v.$spacing-md;
+  font-weight: 600;
+  font-size: 14px;
+  margin-right: v.$spacing-xl;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+
+  @include b.mobile {
+    padding: v.$spacing-xs v.$spacing-sm;
+    font-size: 12px;
+  }
+}
+
+.boardTitleInput {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  padding: 0 12px;
+  color: #172b4d;
+  background-color: #fff;
+  border: 2px solid #0079bf;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  display: inline-block;
+  width: auto;
+  min-width: 200px;
+  outline: none;
+}
+
+.columnsWrapper {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  overflow-x: auto;
+}
+
+.title {
+  color: #10957d;
+  background: rgba(16, 149, 125, 0.15);
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.dragOverlay {
+  transform: rotate(3deg);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Semantic list wrappers (keep existing flex layout) */
+.columnsList {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  align-items: flex-start;
+  @include m.list-reset;
+}
+
+.columnListItem {
+  /* no styling needed; keeps markup flexible */
+}
+
+.boardTitleWrapper {
+  display: inline-block;
+}

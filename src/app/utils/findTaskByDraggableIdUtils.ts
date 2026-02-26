@@ -1,7 +1,4 @@
-import type {
-  ColumnsState,
-  Task,
-} from "@/src/app/components/kanban/kanban.types";
+import type { ColumnsState, Task } from "@/src/app/components/Kanban/kanban.types";
 
 export function findTaskByDraggableId(
   columns: ColumnsState,

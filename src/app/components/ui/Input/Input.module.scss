@@ -1,0 +1,1 @@
+@use "../../../../styles/variables" as v;@use "../../../../styles/mixins" as m;.input {  width: 100%;  padding: 8px 10px;  border: 1px solid v.$border-color;  border-radius: v.$border-radius;  background: #fff;  color: v.$text-color;  font-size: 14px;  line-height: 20px;  &:focus {    @include m.focus-ring;  }}

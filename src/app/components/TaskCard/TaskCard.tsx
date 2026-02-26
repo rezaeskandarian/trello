@@ -1,5 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
-import type { Task } from "../kanban/kanban.types";
+import type { Task } from "../Kanban/kanban.types";
 import { useState } from "react";
 import styles from "./TaskCard.module.scss";
 import CommentModal from "./CommentModal";
@@ -31,22 +31,23 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
 
   return (
     <>
-      <section ref={setNodeRef} {...attributes} {...listeners}>
+      <article ref={setNodeRef} {...attributes} {...listeners}>
         <div className={styles.card}>
           <p>{task.Task}</p>
 
-          <div className={styles.secondary}>
+          <footer className={styles.secondary}>
             <button
               type="button"
               className={styles.commentButton}
               onPointerDown={stopPropagation}
               onClick={handleOpenModal}
+              aria-haspopup="dialog"
             >
               Comments ({task.comments?.length || 0})
             </button>
-          </div>
+          </footer>
         </div>
-      </section>
+      </article>
 
       {isModalOpen && (
         <CommentModal

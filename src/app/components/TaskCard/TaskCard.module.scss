@@ -1,25 +1,30 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
 .card {
+  @include m.card-style;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 15px;
+  padding: v.$spacing-lg;
   min-height: 106px;
   word-wrap: break-word;
+  margin-top: v.$spacing-lg;
   border-radius: 6px;
-  background: white;
+
+
   cursor: grab;
-  margin-top: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 
   p {
     margin: 0 0 10px 0;
     font-size: 14px;
     line-height: 1.4;
+    color: v.$text-color;
   }
-}
 
-.card:active {
-  cursor: grabbing;
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .secondary {
@@ -31,44 +36,29 @@
 }
 
 .commentButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-    color: #5e6c84;
-    padding: 4px 6px;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
+  @include m.button-reset;
+  font-size: 12px;
+  color: v.$subtext-color;
+  padding: v.$spacing-xs 6px;
+  border-radius: v.$border-radius;
+  display: flex;
+  align-items: center;
 
-    &:hover {
-        background-color: rgba(9, 30, 66, 0.08); /* Darken slightly on hover */
-        color: #172b4d;
-    }
+  &:hover {
+    background-color: v.$hover-bg;
+    color: v.$text-color;
+  }
 }
 
+
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  @include m.modal-overlay;
 }
 
 .modalContent {
-    background-color: #f4f5f7;
-    border-radius: 2px;
-    width: 600px;
-    max-width: 90%;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh;
+  @include m.modal-content(#f4f5f7, 2px);
+  width: 600px;
+  padding: 20px;
 }
 
 .modalHeader {
@@ -98,7 +88,7 @@
 
     &:hover {
         color: #172b4d;
-        background-color: rgba(9, 30, 66, 0.08);
+        background-color: v.$hover-bg;
         border-radius: 50%;
     }
 }
@@ -185,7 +175,7 @@
 
     &:focus {
         background-color: #fff;
-        box-shadow: 0 0 0 2px #0079bf;
+        box-shadow: 0 0 0 2px v.$primary-color;
     }
 }
 
@@ -202,9 +192,4 @@
     &:hover {
         background-color: #519839;
     }
-}
-
-.dragging {
-  opacity: 0.5;
-  cursor: grabbing;
 }

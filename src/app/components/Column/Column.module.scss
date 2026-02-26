@@ -1,61 +1,70 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+@use "../../../styles/_breakpoints.scss" as b;
+
 .taskList {
-  background: #f3f3f3;
+  background: v.$list-bg;
   width: 350px;
-  border-radius: 5px;
-  padding: 15px;
+  border-radius: 5px; // Slightly rounder than cards usually
+  padding: v.$spacing-lg;
   position: relative;
+
+  @include b.mobile {
+    width: 100%; // Full width on mobile
+    margin-bottom: v.$spacing-md;
+  }
 }
 
 .columnHeader {
-  display: flex;
-  justify-content: space-between;
+  @include m.flex-between;
   align-items: flex-start;
   position: relative;
+  margin-bottom: v.$spacing-sm;
 }
 
 .title {
   font-weight: 600;
   font-size: 16px;
-  padding: 4px 8px;
-  margin-bottom: 8px;
+  padding: v.$spacing-xs v.$spacing-sm;
+  margin-bottom: v.$spacing-sm;
   cursor: pointer;
   display: block;
-  border-radius: 3px;
+  border-radius: v.$border-radius;
+  color: v.$text-color;
 
   &:hover {
-    background-color: rgba(9, 30, 66, 0.08);
+    background-color: v.$hover-bg;
   }
 }
 
 .titleInput {
   font-weight: 600;
   font-size: 16px;
-  padding: 4px 8px;
-  margin-bottom: 8px;
+  padding: v.$spacing-xs v.$spacing-sm;
+  margin-bottom: v.$spacing-sm;
   width: 100%;
-  border: 2px solid #0079bf;
-  border-radius: 3px;
+  border: 2px solid v.$primary-color;
+  border-radius: v.$border-radius;
   outline: none;
   box-sizing: border-box;
   display: block;
   background-color: #fff;
   font-family: inherit;
-  color: #172b4d;
+  color: v.$text-color;
 }
 
 .addCardTrigger {
-  background-color: transparent;
-  border: none;
-  color: #5e6c84;
-  cursor: pointer;
+  @include m.button-reset;
+  color: v.$subtext-color;
   font-size: 14px;
+
   padding: 8px;
   text-align: left;
   width: 100%;
   border-radius: 4px;
 
   &:hover {
-    background-color: rgba(9, 30, 66, 0.08);
+    background-color: v.$hover-bg;
     color: #172b4d;
   }
 }
@@ -136,7 +145,7 @@
   line-height: 20px;
 
   &:hover {
-    background-color: rgba(9, 30, 66, 0.08);
+    background-color: v.$hover-bg;
     color: #172b4d;
   }
 }
@@ -155,11 +164,11 @@
   width: 304px;
   overflow: hidden;
   margin-top: 4px;
-}
 
-.menuContainer .dropdownMenu {
-  left: 0;
-  top: 32px;
+  .menuContainer & {
+    left: 0;
+    top: 32px;
+  }
 }
 
 .dropdownHeader {
@@ -216,10 +225,14 @@
   }
 }
 
+.backButtonPlaceholder {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+}
+
 .dropdownList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  @include m.list-reset;
 
   li {
     cursor: pointer;
@@ -246,7 +259,7 @@
 }
 
 .dangerButton {
-  background-color: #b04632;
+  background-color: v.$danger-color;
   color: #fff;
   width: 100%;
   padding: 6px 12px;
@@ -257,6 +270,117 @@
   text-align: center;
 
   &:hover {
-    background-color: #933b27;
+    background-color: v.$danger-color-hover;
   }
+}
+
+.addColumnContainer {
+  min-width: 272px;
+  width: 272px;
+  background-color: hsla(0, 0%, 100%, 0.24);
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 85ms ease-in, opacity 40ms ease-in, border-color 85ms ease-in;
+  margin-left: 8px;
+
+  &:hover {
+    background-color: hsla(0, 0%, 100%, 0.32);
+  }
+}
+
+.addColumnButton {
+  border-radius: 3px;
+  color: #172b4d;
+  background-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background-color: #e2e4e6;
+  }
+}
+
+.addColumnForm {
+  background-color: #ebecf0;
+  border-radius: 3px;
+  padding: 4px;
+  min-width: 272px;
+  width: 272px;
+  margin-left: 8px;
+}
+
+.addColumnInput {
+  background-color: #fff;
+  border: 2px solid #0079bf;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #172b4d;
+  display: block;
+  line-height: 20px;
+  margin-bottom: 4px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+
+.addColumnActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.addListButton {
+  background-color: #0079bf;
+  border: none;
+  border-radius: 3px;
+  box-shadow: none;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 6px 12px;
+  text-align: center;
+
+  &:hover {
+    background-color: #026aa7;
+  }
+}
+
+.cancelAddColumn {
+  background: none;
+  border: none;
+  color: #42526e;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #172b4d;
+  }
+}
+
+.cardsList {
+  @include m.list-reset;
+  padding: 0;
+  margin: 0;
+}
+
+.cardsListItem {
+  /* spacing is handled by TaskCard styles (margin-top) */
 }

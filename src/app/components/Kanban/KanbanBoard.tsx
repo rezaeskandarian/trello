@@ -1,16 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useCallback } from "react";
+import type { DragEndEvent } from "@dnd-kit/core";
 
-import {
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  closestCenter,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-
-import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
@@ -21,15 +13,14 @@ import {
   resetBoardAtom,
 } from "../../atom/kanbanStore";
 import styles from "./Kanban.module.scss";
-import Column from "../Column/Colomn";
+import Column from "../Column/Column";
 import TaskCard from "../TaskCard/TaskCard";
-import type { Task } from "./kanban.types";
 import EditableTitle from "../EditableTitle";
 import AddListForm from "../Column/AddListForm";
-import { findTaskByDraggableId } from "@/src/app/utils/findTaskByDraggableIdUtils";
+import { useKanbanDnd } from "../../hooks/useKanbanDnd";
+import {Button} from "@/src/app/components/ui";
 
 const KanbanBoard = () => {
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
   const columns = useAtomValue(columnsAtom);
   const moveTask = useSetAtom(moveTaskAtom);
   const addColumn = useSetAtom(addColumnAtom);
@@ -37,23 +28,18 @@ const KanbanBoard = () => {
   const [boardTitle, setBoardTitle] = useAtom(boardTitleAtom);
   const resetBoard = useSetAtom(resetBoardAtom);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    moveTask(event);
-    setActiveTask(null);
-  };
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
+  const onMoveTask = useCallback(
+    (event: DragEndEvent) => {
+      moveTask(event);
+    },
+    [moveTask],
   );
 
-  const handleDragStart = (event: DragStartEvent) => {
-    const task = findTaskByDraggableId(columns, event.active.id.toString());
-    setActiveTask(task);
-  };
+  const { sensors, collisionDetection, activeTask, onDragStart, onDragEnd } =
+    useKanbanDnd({
+      columns,
+      onMoveTask,
+    });
 
   const handleAddColumn = (title: string) => {
     addColumn(title);
@@ -65,13 +51,13 @@ const KanbanBoard = () => {
 
   return (
     <DndContext
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      collisionDetection={collisionDetection}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
       sensors={sensors}
     >
-      <section className={styles.container}>
-        <div className={styles.boardHeader}>
+      <section className={styles.container} aria-label="Kanban board">
+        <header className={styles.boardHeader}>
           <div className={styles.titleContainer}>
             <div className={styles.boardTitleWrapper}>
               <EditableTitle
@@ -81,26 +67,33 @@ const KanbanBoard = () => {
                 inputClassName={styles.boardTitleInput}
               />
             </div>
-            <button
+            <Button
               type="button"
               className={styles.resetButton}
               onClick={resetBoard}
             >
               Reset All Fields
-            </button>
+            </Button>
           </div>
-        </div>
-        <div className={styles.columnsWrapper}>
-          {Object.entries(columns).map(([columnId, column]) => (
-            <Column key={columnId} columnId={columnId} column={column} />
-          ))}
+        </header>
 
-          <AddListForm onAdd={handleAddColumn} />
-        </div>
+        <main className={styles.columnsWrapper} aria-label="Columns">
+          <ul className={styles.columnsList} role="list">
+            {Object.entries(columns).map(([columnId, column]) => (
+              <li key={columnId} className={styles.columnListItem}>
+                <Column columnId={columnId} column={column} />
+              </li>
+            ))}
+            <li className={styles.columnListItem}>
+              <AddListForm onAdd={handleAddColumn} />
+            </li>
+          </ul>
+        </main>
       </section>
+
       <DragOverlay>
         {activeTask && (
-          <div className={styles.dragOverlay}>
+          <div className={styles.dragOverlay} aria-label="Dragging task preview">
             <TaskCard task={activeTask} columnId="overlay" />
           </div>
         )}

@@ -1,4 +1,4 @@
-import type { ColumnsState, Task } from "../components/kanban/kanban.types";
+import type { ColumnsState, Task } from "../components/Kanban/kanban.types";
 
 let taskId = 1;
 

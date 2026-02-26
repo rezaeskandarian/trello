@@ -1,0 +1,1 @@
+import type { InputHTMLAttributes } from 'react';import clsx from 'clsx';import styles from './Input.module.scss';export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}export const Input = ({ className, ...props }: InputProps) => {  return <input className={clsx(styles.input, className)} {...props} />;};

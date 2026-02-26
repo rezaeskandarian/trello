@@ -1,5 +1,7 @@
 import { useState } from "react";
+import type { KeyboardEvent, ChangeEvent } from "react";
 import styles from "../Column/Column.module.scss";
+import { Button, Textarea } from "../ui";
 
 interface AddCardFormProps {
   onAdd: (text: string) => void;
@@ -20,13 +22,13 @@ const AddCardForm = ({ onAdd }: AddCardFormProps) => {
   if (isAdding) {
     return (
       <div className={styles.addCardContainer}>
-        <textarea
+        <Textarea
           className={styles.addCardTextarea}
           placeholder="Enter a title for this card..."
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value)}
           autoFocus
-          onKeyDown={(e) => {
+          onKeyDown={(e: KeyboardEvent<HTMLTextAreaElement>) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               handleSubmit();
@@ -34,36 +36,38 @@ const AddCardForm = ({ onAdd }: AddCardFormProps) => {
           }}
         />
         <div className={styles.addCardActions}>
-          <button
+          <Button
             type="button"
             className={styles.addCardButton}
             onClick={handleSubmit}
           >
             Add Card
-          </button>
-          <button
+          </Button>
+          <Button
             className={styles.cancelButton}
+            variant="transparent"
             type="button"
             onClick={() => {
               setIsAdding(false);
               setText("");
             }}
           >
-            ✕
-          </button>
+            ×
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <button
+    <Button
       type="button"
+      variant="transparent"
       className={styles.addCardTrigger}
       onClick={() => setIsAdding(true)}
     >
       + Add another card
-    </button>
+    </Button>
   );
 };
 
