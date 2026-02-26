@@ -1,3 +1,5 @@
+# Trello Clone
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -12,25 +14,43 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
+ with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses next/font
+ to automatically optimize and load Geist
+, a new font family for Vercel.
 
-## Learn More
+Technologies Used
 
-To learn more about Next.js, take a look at the following resources:
+This project uses the following technologies and tools:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js
+ - React framework for server-side rendering, routing, and optimized builds.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+React
+ - Front-end library for building UI components.
 
-## Deploy on Vercel
+Jotai
+ - State management library using atoms for reactive state in React.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Dnd-Kit
+ - Drag-and-drop toolkit for React, including core, sortable, and utilities packages.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+TypeScript
+ - Superset of JavaScript with static typing.
+
+Sass
+ - CSS preprocessor for modular and nested styles.
+
+Biome
+ - Linter and formatter for code quality and style.
+
+Husky
+ - Git hooks to run scripts before commits.
+
+Commitlint
+ - Enforces conventional commit messages.
