@@ -20,10 +20,6 @@ Open http://localhost:3000
 
 You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
 
-This project uses next/font
- to automatically optimize and load Geist
-, a new font family for Vercel.
-
 Technologies Used
 
 This project uses the following technologies and tools:
