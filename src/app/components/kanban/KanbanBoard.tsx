@@ -3,25 +3,32 @@ import { useState } from "react";
 
 import {
   DndContext,
-  DragEndEvent,
   DragOverlay,
-  DragStartEvent,
   PointerSensor,
   closestCenter,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { columnsAtom, moveTaskAtom, addColumnAtom, boardTitleAtom, resetBoardAtom } from "../../atom/kanbanStore";
-import styles from "./Kanban.module.scss";
-import Column from "./Colomn";
-import TaskCard from "./TaskCard";
-import { Task } from "./kanban.types";
-import EditableTitle from "./EditableTitle";
-import AddListForm from "./AddListForm";
+import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 
-const Kanban = () => {
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  columnsAtom,
+  moveTaskAtom,
+  addColumnAtom,
+  boardTitleAtom,
+  resetBoardAtom,
+} from "../../atom/kanbanStore";
+import styles from "./Kanban.module.scss";
+import Column from "../Column/Colomn";
+import TaskCard from "../TaskCard/TaskCard";
+import type { Task } from "./kanban.types";
+import EditableTitle from "../EditableTitle";
+import AddListForm from "../Column/AddListForm";
+import { findTaskByDraggableId } from "@/src/app/utils/findTaskByDraggableIdUtils";
+
+const KanbanBoard = () => {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const columns = useAtomValue(columnsAtom);
   const moveTask = useSetAtom(moveTaskAtom);
@@ -40,38 +47,20 @@ const Kanban = () => {
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event;
-    const activeId = active.id.toString();
-
-    let foundTask: Task | null = null;
-
-    for (const colId in columns) {
-      if (activeId.startsWith(`${colId}-`)) {
-        const remaining = activeId.slice(colId.length + 1);
-        if (!isNaN(Number(remaining))) {
-            const taskId = Number(remaining);
-            const task = columns[colId].items.find((t) => t.id === taskId);
-            if (task) {
-                foundTask = task;
-                break;
-            }
-        }
-      }
-    }
-
-    setActiveTask(foundTask);
+    const task = findTaskByDraggableId(columns, event.active.id.toString());
+    setActiveTask(task);
   };
 
   const handleAddColumn = (title: string) => {
-      addColumn(title);
+    addColumn(title);
   };
 
   const handleBoardTitleSave = (newTitle: string) => {
-      setBoardTitle(newTitle);
+    setBoardTitle(newTitle);
   };
 
   return (
@@ -85,16 +74,19 @@ const Kanban = () => {
         <div className={styles.boardHeader}>
           <div className={styles.titleContainer}>
             <div className={styles.boardTitleWrapper}>
-             <EditableTitle
+              <EditableTitle
                 title={boardTitle}
-                isBoardTitle={true}
                 onSave={handleBoardTitleSave}
                 titleClassName={styles.boardTitle}
                 inputClassName={styles.boardTitleInput}
-             />
+              />
             </div>
-            <button className={styles.resetButton} onClick={resetBoard}>
-                Reset All Fields
+            <button
+              type="button"
+              className={styles.resetButton}
+              onClick={resetBoard}
+            >
+              Reset All Fields
             </button>
           </div>
         </div>
@@ -103,7 +95,7 @@ const Kanban = () => {
             <Column key={columnId} columnId={columnId} column={column} />
           ))}
 
-           <AddListForm onAdd={handleAddColumn} />
+          <AddListForm onAdd={handleAddColumn} />
         </div>
       </section>
       <DragOverlay>
@@ -111,10 +103,10 @@ const Kanban = () => {
           <div className={styles.dragOverlay}>
             <TaskCard task={activeTask} columnId="overlay" />
           </div>
-        ) }
+        )}
       </DragOverlay>
     </DndContext>
   );
 };
 
-export default Kanban;
+export default KanbanBoard;

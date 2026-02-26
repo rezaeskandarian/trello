@@ -1,14 +1,12 @@
 "use client";
 import dynamic from "next/dynamic";
 
-const Kanban = dynamic(() => import("./components/kanban"), {
+const KanbanBoard = dynamic(() => import("./components/kanban/KanbanBoard"), {
   ssr: false,
 });
 
 export default function Home() {
   return (
-    <>
-      <Kanban />
-    </>
+      <KanbanBoard />
   );
 }

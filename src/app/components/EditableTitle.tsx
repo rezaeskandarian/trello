@@ -1,0 +1,58 @@
+import { useState } from "react";
+
+interface EditableTitleProps {
+  title: string;
+  isBoardTitle?: boolean;
+  onSave: (newTitle: string) => void;
+  titleClassName: string;
+  inputClassName: string;
+}
+
+const EditableTitle = ({
+  title,
+  onSave,
+  titleClassName,
+  inputClassName,
+}: EditableTitleProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [text, setText] = useState(title);
+
+  const handleSubmit = () => {
+    setIsEditing(false);
+    if (text.trim() && text !== title) {
+      onSave(text);
+    } else {
+      setText(title);
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <input
+        className={inputClassName}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleSubmit();
+        }}
+        autoFocus
+      />
+    );
+  }
+
+  return (
+    <span
+      className={titleClassName}
+      role="button"
+      onClick={() => {
+        setIsEditing(true);
+        setText(title);
+      }}
+    >
+      {title}
+    </span>
+  );
+};
+
+export default EditableTitle;

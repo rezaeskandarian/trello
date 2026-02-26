@@ -2,17 +2,23 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import TaskCard from "./TaskCard";
+import TaskCard from "../TaskCard/TaskCard";
 import { useDroppable } from "@dnd-kit/core";
 import styles from "./Column.module.scss";
 import { useSetAtom } from "jotai";
 import { addTaskAtom, updateColumnTitleAtom } from "../../atom/kanbanStore";
-import { type Column as ColumnType } from "./kanban.types";
+import type { Column as ColumnType } from "../kanban/kanban.types";
 import ColumnActionsMenu from "./ColumnActionsMenu";
-import EditableTitle from "./EditableTitle";
+import EditableTitle from "../EditableTitle";
 import AddCardForm from "./AddCardForm";
 
-const Column = ({ columnId, column }: { columnId: string, column: ColumnType }) => {
+const Column = ({
+  columnId,
+  column,
+}: {
+  columnId: string;
+  column: ColumnType;
+}) => {
   const { setNodeRef } = useDroppable({
     id: columnId,
   });
@@ -21,23 +27,23 @@ const Column = ({ columnId, column }: { columnId: string, column: ColumnType }) 
   const updateColumnTitle = useSetAtom(updateColumnTitleAtom);
 
   const handleAddCard = (content: string) => {
-     addTask({ columnId, content });
+    addTask({ columnId, content });
   };
 
   const handleTitleSave = (newTitle: string) => {
-      updateColumnTitle({ columnId, newTitle });
+    updateColumnTitle({ columnId, newTitle });
   };
 
   return (
     <div ref={setNodeRef} className={styles.taskList}>
       <div className={styles.columnHeader}>
-        <div style={{ flexGrow: 1 }}> {/* Wrapper to allow title to take space properly with flex */}
-            <EditableTitle
-                title={column.title}
-                onSave={handleTitleSave}
-                titleClassName={styles.title}
-                inputClassName={styles.titleInput}
-            />
+        <div>
+          <EditableTitle
+            title={column.title}
+            onSave={handleTitleSave}
+            titleClassName={styles.title}
+            inputClassName={styles.titleInput}
+          />
         </div>
         <ColumnActionsMenu columnId={columnId} />
       </div>

@@ -1,6 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Task } from "./kanban.types";
+import type { Task } from "../kanban/kanban.types";
 import { useState } from "react";
 import styles from "./TaskCard.module.scss";
 import CommentModal from "./CommentModal";
@@ -11,17 +10,11 @@ interface TaskCardProps {
 }
 
 const TaskCard = ({ task, columnId }: TaskCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: `${columnId}-${task.id}`,
-    });
+  const { attributes, listeners, setNodeRef } = useSortable({
+    id: `${columnId}-${task.id}`,
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: transition ?? "transform 200ms ease",
-  };
 
   const handleOpenModal = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -38,12 +31,13 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
 
   return (
     <>
-      <section ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <section ref={setNodeRef} {...attributes} {...listeners}>
         <div className={styles.card}>
           <p>{task.Task}</p>
 
           <div className={styles.secondary}>
             <button
+              type="button"
               className={styles.commentButton}
               onPointerDown={stopPropagation}
               onClick={handleOpenModal}
@@ -56,9 +50,9 @@ const TaskCard = ({ task, columnId }: TaskCardProps) => {
 
       {isModalOpen && (
         <CommentModal
-            task={task}
-            columnId={columnId}
-            onClose={handleCloseModal}
+          task={task}
+          columnId={columnId}
+          onClose={handleCloseModal}
         />
       )}
     </>

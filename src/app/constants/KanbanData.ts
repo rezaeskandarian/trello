@@ -1,29 +1,24 @@
-import { ColumnsState, Task } from "../components/kanban/kanban.types";
+import type { ColumnsState, Task } from "../components/kanban/kanban.types";
 
 let taskId = 1;
 
-const createTask = (title: string, dueDate: string): Task => ({
+const createTask = (title: string): Task => ({
   id: taskId++,
   Task: title,
-
 });
 
 const todoTasks: Task[] = [
-  createTask(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "2020-05-25"
-  ),
-  createTask("Fix Styling Issues", "2020-05-26"),
-  createTask("Handle Door Specs", "2020-05-27"),
+  createTask("Lorem ipsum dolor sit amet, consectetur adipiscing elit."),
+  createTask("Fix Styling Issues"),
+  createTask("Handle Door Specs"),
 ];
 
 const inProgressTasks: Task[] = [];
 
 const doneTasks: Task[] = [
-  createTask("Morbi Refactor", "2020-08-23"),
-  createTask("Proin Optimization", "2021-01-05"),
+  createTask("Morbi Refactor"),
+  createTask("Proin Optimization"),
 ];
-
 
 export const columnsFromBackend: ColumnsState = {
   1: {
